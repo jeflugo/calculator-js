@@ -21,202 +21,209 @@ const lightColor = 'ghostwhite'
 const placeholderColor = 'darkgray'
 
 function init() {
-  btns.forEach((btn) => {
-    const keyInfo = btn.innerHTML
-    btn.addEventListener('click', () => {
-      detectBtn(keyInfo)
-    })
-  })
-  document.addEventListener('keydown', (e) => {
-    const keyInfo = e.key
-    detectKey(keyInfo)
-  })
+	btns.forEach(btn => {
+		const keyInfo = btn.innerHTML
+		btn.addEventListener('click', () => {
+			detectBtn(keyInfo)
+		})
+	})
+	document.addEventListener('keydown', e => {
+		const keyInfo = e.key
+		detectKey(keyInfo)
+	})
 
-  // Theme Stuff
-  themeBtn.addEventListener('mouseenter', hoverThemeBtn)
-  themeBtn.addEventListener('mouseleave', hoverOutThemeBtn)
-  btns.forEach((btn) => {
-    btn.addEventListener('mouseenter', () => hoverBtn(btn))
-    btn.addEventListener('mouseleave', () => hoverOutBtn(btn))
-  })
-  themeBtn.addEventListener('click', changeTheme)
+	// Theme Stuff
+	themeBtn.addEventListener('mouseenter', hoverThemeBtn)
+	themeBtn.addEventListener('mouseleave', hoverOutThemeBtn)
+	btns.forEach(btn => {
+		btn.addEventListener('mouseenter', () => hoverBtn(btn))
+		btn.addEventListener('mouseleave', () => hoverOutBtn(btn))
+	})
+	themeBtn.addEventListener('click', changeTheme)
 }
 
 function detectBtn(keyInfo) {
-  switch (keyInfo) {
-    case 'AC':
-      reset()
-      break
-    case 'DEL':
-      dlt()
-      break
-    case '=':
-      calculate()
-      break
-    default:
-      update(keyInfo)
-      break
-  }
+	switch (keyInfo) {
+		case 'AC':
+			reset()
+			break
+		case 'DEL':
+			dlt()
+			break
+		case '=':
+			calculate()
+			break
+		default:
+			update(keyInfo)
+			break
+	}
 }
 function detectKey(keyInfo) {
-  if (
-    keyInfo === '0' ||
-    keyInfo === '1' ||
-    keyInfo === '2' ||
-    keyInfo === '3' ||
-    keyInfo === '4' ||
-    keyInfo === '5' ||
-    keyInfo === '6' ||
-    keyInfo === '7' ||
-    keyInfo === '8' ||
-    keyInfo === '9' ||
-    keyInfo === '%' ||
-    keyInfo === '/' ||
-    keyInfo === '*' ||
-    keyInfo === '-' ||
-    keyInfo === '+' ||
-    keyInfo === '.'
-  ) {
-    update(keyInfo)
-  } else if (keyInfo === 'Escape') {
-    reset()
-  } else if (keyInfo === 'Backspace') {
-    dlt()
-  } else if (keyInfo === 'Enter') {
-    calculate()
-  }
+	if (
+		keyInfo === '0' ||
+		keyInfo === '1' ||
+		keyInfo === '2' ||
+		keyInfo === '3' ||
+		keyInfo === '4' ||
+		keyInfo === '5' ||
+		keyInfo === '6' ||
+		keyInfo === '7' ||
+		keyInfo === '8' ||
+		keyInfo === '9' ||
+		keyInfo === '%' ||
+		keyInfo === '/' ||
+		keyInfo === '*' ||
+		keyInfo === '-' ||
+		keyInfo === '+' ||
+		keyInfo === '.'
+	) {
+		update(keyInfo)
+	} else if (keyInfo === 'Escape') {
+		reset()
+	} else if (keyInfo === 'Backspace') {
+		dlt()
+	} else if (keyInfo === 'Enter') {
+		calculate()
+	}
 }
 
 function reset() {
-  resetPressedConsec++
+	resetPressedConsec++
 
-  data.style.color = placeholderColor
-  data.innerHTML = placeholder
-  result.innerHTML = 0
+	data.style.color = placeholderColor
+	data.innerHTML = placeholder
+	result.innerHTML = 0
 
-  equalPressed = false
+	equalPressed = false
 
-  if (resetPressedConsec === 2) {
-    for (let i = operations.children.length - 1; i >= 0; i--) {
-      operations.removeChild(operations.children[i])
-    }
-    resetPressedConsec = 0
-  }
+	if (resetPressedConsec === 2) {
+		for (let i = operations.children.length - 1; i >= 0; i--) {
+			operations.removeChild(operations.children[i])
+		}
+		resetPressedConsec = 0
+	}
 }
 function dlt() {
-  if (!equalPressed && data.innerHTML !== placeholder) {
-    let dataArray = Array.from(data.innerHTML)
-    dataArray.pop()
-    const dataString = dataArray.toString().replaceAll(',', '')
-    data.innerHTML = dataString
+	if (!equalPressed && data.innerHTML !== placeholder) {
+		let dataArray = Array.from(data.innerHTML)
+		dataArray.pop()
+		const dataString = dataArray.toString().replaceAll(',', '')
+		data.innerHTML = dataString
 
-    if (data.innerHTML === '') {
-      data.style.color = placeholderColor
-      data.innerHTML = placeholder
-    }
-  }
+		if (data.innerHTML === '') {
+			data.style.color = placeholderColor
+			data.innerHTML = placeholder
+		}
+	}
 }
 function calculate() {
-  result.innerHTML = eval(data.innerHTML)
-  equalPressed = true
+	result.innerHTML = eval(data.innerHTML)
+	equalPressed = true
 
-  updateOperations()
+	updateOperations()
 }
 function update(keyInfo) {
-  resetPressedConsec = 0
+	resetPressedConsec = 0
 
-  if (data.innerHTML === placeholder) {
-    data.style.color = darkColor
-    if (themeChanged) data.style.color = lightColor
+	if (data.innerHTML === placeholder) {
+		data.style.color = darkColor
+		if (themeChanged) {
+			console.log(themeChanged)
+			data.style.color = lightColor
+		}
 
-    data.innerHTML = ''
-  }
+		data.innerHTML = ''
+	}
 
-  if (equalPressed) {
-    data.innerHTML = ''
-    equalPressed = false
+	if (equalPressed) {
+		data.innerHTML = ''
+		equalPressed = false
 
-    if (
-      keyInfo == '%' ||
-      keyInfo == '/' ||
-      keyInfo == '*' ||
-      keyInfo == '-' ||
-      keyInfo == '+'
-    ) {
-      data.innerHTML = result.innerHTML
-    }
-  }
-  data.innerHTML += keyInfo
+		if (
+			keyInfo == '%' ||
+			keyInfo == '/' ||
+			keyInfo == '*' ||
+			keyInfo == '-' ||
+			keyInfo == '+'
+		) {
+			data.innerHTML = result.innerHTML
+		}
+	}
+	data.innerHTML += keyInfo
 }
 
 function updateOperations() {
-  const operation = document.createElement('div')
-  operation.className = 'operation'
-  operation.innerHTML = `
+	const operation = document.createElement('div')
+	operation.className = 'operation'
+	operation.innerHTML = `
     <p class="expression">${data.innerHTML}</p>
     <p class="result">=${result.innerHTML}</p>
   `
-  operations.appendChild(operation)
+	operations.appendChild(operation)
 }
 
 function changeTheme() {
-  if (!themeChanged) {
-    changeToDarkMode()
-    return
-  }
-  changeToLightMode()
+	if (!themeChanged) {
+		changeToDarkMode()
+		return
+	}
+	changeToLightMode()
 }
 function changeToDarkMode() {
-  document.body.style.color = lightColor
-  document.body.style.backgroundColor = darkColor
+	document.body.style.color = lightColor
+	document.body.style.backgroundColor = darkColor
 
-  head.style.borderBottomColor = lightColor
-  themeBtn.style.borderColor = lightColor
-  themeBtn.style.backgroundColor = darkThemeBtnColor
-  themeBtn.title = 'Change to Light mode'
+	data.style.color = lightColor
 
-  line.style.borderBottomColor = lightColor
+	head.style.borderBottomColor = lightColor
+	themeBtn.style.borderColor = lightColor
+	themeBtn.style.backgroundColor = darkThemeBtnColor
+	themeBtn.title = 'Change to Light mode'
 
-  themeChanged = true
+	line.style.borderBottomColor = lightColor
+
+	themeChanged = true
 }
 function changeToLightMode() {
-  document.body.style.color = darkColor
-  document.body.style.backgroundColor = lightColor
+	document.body.style.color = darkColor
+	document.body.style.backgroundColor = lightColor
 
-  head.style.borderBottomColor = darkColor
-  themeBtn.style.borderColor = darkColor
-  themeBtn.style.backgroundColor = themeBtnColor
-  themeBtn.title = 'Change to Dark mode'
+	data.style.color = darkColor
 
-  line.style.borderBottomColor = darkColor
+	head.style.borderBottomColor = darkColor
+	themeBtn.style.borderColor = darkColor
+	themeBtn.style.backgroundColor = themeBtnColor
+	themeBtn.title = 'Change to Dark mode'
 
-  themeChanged = false
+	line.style.borderBottomColor = darkColor
+
+	themeChanged = false
 }
 
 function hoverThemeBtn() {
-  if (themeChanged) {
-    themeBtn.style.backgroundColor = darkBtnHoverColor
-    return
-  }
-  themeBtn.style.backgroundColor = btnHoverColor
+	if (themeChanged) {
+		themeBtn.style.backgroundColor = darkBtnHoverColor
+		return
+	}
+	themeBtn.style.backgroundColor = btnHoverColor
 }
 function hoverOutThemeBtn() {
-  if (themeChanged) {
-    themeBtn.style.backgroundColor = darkThemeBtnColor
-    return
-  }
-  themeBtn.style.backgroundColor = themeBtnColor
+	if (themeChanged) {
+		themeBtn.style.backgroundColor = darkThemeBtnColor
+		return
+	}
+	themeBtn.style.backgroundColor = themeBtnColor
 }
 
 function hoverBtn(btn) {
-  if (themeChanged) {
-    btn.style.backgroundColor = darkBtnHoverColor
-    return
-  }
-  btn.style.backgroundColor = btnHoverColor
+	if (themeChanged) {
+		btn.style.backgroundColor = darkBtnHoverColor
+		return
+	}
+	btn.style.backgroundColor = btnHoverColor
 }
 function hoverOutBtn(btn) {
-  btn.style.backgroundColor = 'transparent'
+	btn.style.backgroundColor = 'transparent'
 }
 
 window.addEventListener('load', init)
